@@ -1,0 +1,31 @@
+[project]
+name = "job-radar"
+version = "0.1.0"
+description = "A respectful job aggregation and alerting engine using public job sources and configurable search profiles."
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]",
+    "uvicorn[standard]",
+    "sqlalchemy>=2.0",
+    "aiosqlite",
+    "httpx",
+    "pydantic-settings",
+    "python-dotenv",
+    "apscheduler",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+    "mypy",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
