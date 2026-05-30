@@ -20,6 +20,8 @@ class JobRadarRunResult:
     matched_count: int
     sent_count: int
     skipped_count: int
+    failed_count: int
+    failure_reasons: list[str]
 
 
 class JobRadarService: 
@@ -85,4 +87,6 @@ class JobRadarService:
             matched_count=len(matches),
             sent_count=sent_count,
             skipped_count=skipped_count,
+            failed_count=0,
+            failure_reasons=[],
         )

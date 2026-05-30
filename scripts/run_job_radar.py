@@ -21,6 +21,8 @@ async def main() -> None:
     total_matches = 0
     total_sent = 0
     total_skipped = 0
+    total_failed = 0
+    failure_reasons: list[str] = []
 
     async with AsyncSessionLocal() as session:
         service = JobRadarService(
@@ -29,11 +31,16 @@ async def main() -> None:
         )
 
         for source in build_greenhouse_sources():
-            result = await service.run_once(
-                source=source,
-                profile=mack_profile,
-                notification_limit=settings.notification_limit,
-            )
+            try:
+                result = await service.run_once(
+                    source=source,
+                    profile=mack_profile,
+                    notification_limit=settings.notification_limit,
+                )
+            except Exception as error:
+                total_failed += 1
+                failure_reasons.append(str(error))
+                continue
 
             total_fetched += result.fetched_count
             total_new += result.new_count
@@ -50,6 +57,13 @@ async def main() -> None:
     print(f"Matches: {total_matches}")
     print(f"Sent: {total_sent}")
     print(f"Skipped: {total_skipped}")
+    
+    print(f"Failed Sources: {total_failed}")
+
+    if failure_reasons:
+        print("Failure Reasons:")
+        for reason in failure_reasons: 
+            print(f"- {reason}")
 
 
 if __name__ == "__main__":
