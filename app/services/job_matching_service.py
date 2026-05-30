@@ -65,7 +65,7 @@ class JobMatchingService:
             )
             reasons.append(f"Matched keywords: {', '.join(matched_keywords)}")
 
-        matched_locations = self._matched_terms(searchable_text, profile.locations)
+        matched_locations = self._match_location(job, profile)
         if matched_locations:
             score += LOCATION_MATCH_SCORE
             reasons.append(f"Matched location: {', '.join(matched_locations)}")
@@ -85,6 +85,35 @@ class JobMatchingService:
             match_level=match_level,
             reasons=reasons,
         )
+    
+    def _match_location(self, job: Job, profile: SearchProfile) -> list[str]:
+        if not job.location: 
+            return []
+        
+        location_text = job.location.lower()
+        matches: list[str] = []
+
+        for location in profile.locations:
+            normalized_location = location.lower()
+
+            if normalized_location in location_text:
+                matches.append(location)
+
+        if self._is_remote_location(location_text) and "remote" not in matches:
+            matches.append("remote")
+
+        return matches
+    
+    def _is_remote_location(self, location_text: str) -> bool:
+        remote_terms = [
+            "remote",
+            "remote -",
+            "remote,",
+            "anywhere",
+            "distributed",
+        ]
+
+        return any(term in location_text for term in remote_terms)
 
     def get_match_level(self, score: int) -> str:
         if score >= EXCELLENT_MATCH_SCORE:
