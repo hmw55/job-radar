@@ -8,6 +8,7 @@ from app.repositories.job_notification_repository import JobNotificationReposito
 from app.repositories.job_repository import JobRepository
 from app.services.job_ingestion_service import JobIngestionService
 from app.services.job_matching_service import JobMatchingService
+from app.services.job_matching_service import JobMatchResult
 from app.sources.base import JobSource
 
 
@@ -54,7 +55,12 @@ class JobRadarService:
         sent_count = 0
         skipped_count = 0
 
-        for result in matches[:notification_limit]:
+        matches_to_send = self._get_matches_to_notify(
+            matches,
+            notification_limit,
+        )
+
+        for result in matches_to_send:
             job = result.job
 
             already_sent = await self.notification_repository.was_sent(
@@ -90,3 +96,17 @@ class JobRadarService:
             failed_count=0,
             failure_reasons=[],
         )
+    
+    def _get_matches_to_notify(
+            self, 
+            matches: list[JobMatchResult],
+            notification_limit: int,
+    ) -> list[JobMatchResult]:
+        if notification_limit == 0:
+            return []
+        
+        if notification_limit < 0:
+            return matches
+        
+        return matches[:notification_limit]
+        
