@@ -40,7 +40,7 @@ class GreenhouseSource:
             updated_at = datetime.fromisoformat(job["updated_at"].replace("Z", "+00:00"))
 
         return NormalizedJob(
-            source="greenhouse",
+            source=f"greenhouse:{self.board_token}",
             source_job_id=str(job["id"]),
             company=self.company_name,
             title=job["title"],
