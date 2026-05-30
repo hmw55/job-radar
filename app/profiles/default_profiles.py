@@ -66,4 +66,28 @@ mack_profile = SearchProfile(
     ],
     excluded_companies=[],
     remote_only=False,
+    allowed_locations=[
+        "remote",
+        "remote - us",
+        "united states",
+        "usa",
+        "us",
+        "u.s."
+        "u.s.a",
+        "americas",
+        "north america",
+        "colorado",
+        "denver",
+    ],
+    excluded_locations=[
+        "india",
+        "china",
+        "singapore",
+        "ireland",
+        "united kingdom",
+        "london",
+        "europe",
+        "european union",
+        "europe timezone",
+    ],
 )

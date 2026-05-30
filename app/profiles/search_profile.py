@@ -11,3 +11,5 @@ class SearchProfile:
     excluded_companies: list[str] = field(default_factory=list)
     experience_levels: list[str] = field(default_factory=list)
     remote_only: bool = False
+    allowed_locations: list[str] = field(default_factory=list)
+    excluded_locations: list[str] = field(default_factory=list)

@@ -31,6 +31,24 @@ class JobMatchingService:
         title = job.title.lower()
         company = job.company.lower()
 
+        if self._is_excluded_location(job, profile):
+            return JobMatchResult(
+                job=job,
+                matched=False,
+                score=0,
+                match_level="NO MATCH",
+                reasons=["Excluded location"],
+            )
+        
+        if not self._is_allowed_location(job, profile):
+            return JobMatchResult(
+                job=job,
+                matched=False,
+                score=0,
+                match_level="NO MATCH",
+                reasons=["Location not allowed"],
+            )
+
         reasons: list[str] = []
         score = 0
 
@@ -114,6 +132,36 @@ class JobMatchingService:
         ]
 
         return any(term in location_text for term in remote_terms)
+    
+    def _is_excluded_location(
+            self,
+            job: Job,
+            profile: SearchProfile,
+    ) -> bool:
+        if not job.location:
+            return False
+        
+        location_text = job.location.lower()
+
+        return any(
+            location.lower() in location_text
+            for location in profile.excluded_locations
+        )
+    
+    def _is_allowed_location(
+            self,  
+            job: Job,
+            profile: SearchProfile,
+    ) -> bool:
+        if not job.location:
+            return True
+        
+        location_text = job.location.lower()
+
+        return any(
+            location.lower() in location_text
+            for location in profile.allowed_locations
+        )
 
     def get_match_level(self, score: int) -> str:
         if score >= EXCELLENT_MATCH_SCORE:
