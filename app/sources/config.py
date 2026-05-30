@@ -1,45 +1,39 @@
-from dataclasses import dataclass
-
-from app.sources.source_config import SourceConfig
-
 from app.sources.greenhouse import GreenhouseSource
 from app.sources.lever import LeverSource
+from app.sources.source_config import SourceConfig
 
 
-@dataclass(frozen=True)
-class GreenhouseBoardConfig:
-    board_token: str
-    company_name: str
-
-
-GREENHOUSE_BOARDS = [
-    GreenhouseBoardConfig(board_token="airbnb", company_name="Airbnb"),
-    GreenhouseBoardConfig(board_token="stripe", company_name="Stripe"),
+GREENHOUSE_SOURCES = [
+    SourceConfig(provider="greenhouse", identifier="airbnb", display_name="Airbnb"),
+    SourceConfig(provider="greenhouse", identifier="stripe", display_name="Stripe"),
 ]
 
-LEVER_COMPANIES = [
+LEVER_SOURCES = [
     SourceConfig(provider="lever", identifier="swissborg", display_name="SwissBorg"),
 ]
+
 
 def build_greenhouse_sources() -> list[GreenhouseSource]:
     return [
         GreenhouseSource(
-            board_token=board.board_token,
-            company_name=board.company_name,
+            board_token=source.identifier,
+            company_name=source.display_name,
         )
-        for board in GREENHOUSE_BOARDS
+        for source in GREENHOUSE_SOURCES
     ]
+
 
 def build_lever_sources() -> list[LeverSource]:
     return [
         LeverSource(
-            company_slug=company.identifier,
-            company_name=company.display_name,
+            company_slug=source.identifier,
+            company_name=source.display_name,
         )
-        for company in LEVER_COMPANIES
+        for source in LEVER_SOURCES
     ]
 
-def build_sources() -> list [GreenhouseSource | LeverSource]:
+
+def build_sources() -> list[GreenhouseSource | LeverSource]:
     return [
         *build_greenhouse_sources(),
         *build_lever_sources(),
