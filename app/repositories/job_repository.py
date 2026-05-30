@@ -5,7 +5,7 @@ from app.models.job import Job
 from app.sources.base import NormalizedJob
 
 
-class JobRespository:
+class JobRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
@@ -35,3 +35,9 @@ class JobRespository:
         await self.session.flush()
 
         return db_job
+    
+    async def list_jobs(self, limit: int = 100) -> list[Job]:
+        statement = select(Job).order_by(Job.first_seen_at.desc()).limit(limit)
+
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.repositories.job_repository import JobRespository
+from app.repositories.job_repository import JobRepository
 from app.sources.base import JobSource
 
 @dataclass(frozen=True)
@@ -13,7 +13,7 @@ class IngestionResult:
 
 class JobIngestionService:
     def __init__(self, session: AsyncSession) -> None:
-        self.job_repository = JobRespository(session)
+        self.job_repository = JobRepository(session)
         self.session = session
 
     async def ingest_from_source(self, source: JobSource) -> IngestionResult:
