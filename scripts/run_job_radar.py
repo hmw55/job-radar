@@ -5,7 +5,8 @@ from app.db.session import AsyncSessionLocal
 from app.notifications.discord import DiscordNotifier
 from app.profiles import mack_profile
 from app.services.job_radar_service import JobRadarService
-from app.sources.config import build_sources
+from app.repositories.company_source_repository import companySourceRepository
+from app.sources.factory import build_source_from_company_source
 
 
 async def main() -> None:
@@ -30,7 +31,11 @@ async def main() -> None:
             notifier=notifier,
         )
 
-        for source in build_sources():
+        company_source_repository = companySourceRepository(session)
+        company_sources = await company_source_repository.list_activate_sources()
+
+        for company_source in company_sources:
+            source = build_source_from_company_source(company_source)
             try:
                 result = await service.run_once(
                     source=source,
@@ -65,6 +70,7 @@ async def main() -> None:
         for reason in failure_reasons: 
             print(f"- {reason}")
 
+    print(f"Sources Polled: {len(company_sources)}")
 
 if __name__ == "__main__":
     asyncio.run(main())
