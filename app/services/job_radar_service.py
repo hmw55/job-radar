@@ -6,6 +6,7 @@ from app.notifications.discord import DiscordNotifier
 from app.profiles.search_profile import SearchProfile
 from app.repositories.job_notification_repository import JobNotificationRepository
 from app.repositories.job_repository import JobRepository
+from app.repositories.job_match_repository import JobMatchRepsoity
 from app.services.job_ingestion_service import JobIngestionService
 from app.services.job_matching_service import JobMatchingService
 from app.services.job_matching_service import JobMatchResult
@@ -37,6 +38,7 @@ class JobRadarService:
         self.job_repository = JobRepository(session)
         self.notification_repository = JobNotificationRepository(session)
         self.matching_service = JobMatchingService()
+        self.match_repository = JobMatchRepsoity(session)
 
     async def run_once(
         self, 
@@ -51,6 +53,12 @@ class JobRadarService:
 
         matches = [result for result in results if result.matched]
         matches.sort(key=lambda result: result.score, reverse=True)
+
+        for result in matches:
+            await self.match_repository.upsert_match(
+                result=result,
+                profile_name=profile.name,
+            )
 
         sent_count = 0
         skipped_count = 0
