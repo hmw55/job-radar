@@ -9,7 +9,7 @@ class companySourceRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def list_activate_sources(self) -> list[CompanySource]:
+    async def list_active_sources(self) -> list[CompanySource]:
         statement = (
             select(CompanySource)
             .where(CompanySource.is_active.is_(True))

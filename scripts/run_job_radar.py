@@ -32,7 +32,7 @@ async def main() -> None:
         )
 
         company_source_repository = companySourceRepository(session)
-        company_sources = await company_source_repository.list_activate_sources()
+        company_sources = await company_source_repository.list_active_sources()
 
         for company_source in company_sources:
             source = build_source_from_company_source(company_source)
