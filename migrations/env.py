@@ -14,7 +14,11 @@ from app.core.config import settings
 config = context.config
 
 def get_alembic_database_url() -> str:
-    return settings.database_url.replace("sqlite+aiosqlite", "sqlite")
+    return (
+        settings.database_url
+        .replace("sqllite+aiosqlite", "sqlite")
+        .replace("postgresql+asyncpg", "postgresql+psycopg")
+    )
 
 config.set_main_option("sqlalchemy.url", get_alembic_database_url())
 
