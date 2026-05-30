@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 
+from app.sources.source_config import SourceConfig
+
 from app.sources.greenhouse import GreenhouseSource
+from app.sources.lever import LeverSource
 
 
 @dataclass(frozen=True)
@@ -14,6 +17,9 @@ GREENHOUSE_BOARDS = [
     GreenhouseBoardConfig(board_token="stripe", company_name="Stripe"),
 ]
 
+LEVER_COMPANIES = [
+    SourceConfig(provider="lever", identifier="swissborg", display_name="SwissBorg"),
+]
 
 def build_greenhouse_sources() -> list[GreenhouseSource]:
     return [
@@ -22,4 +28,19 @@ def build_greenhouse_sources() -> list[GreenhouseSource]:
             company_name=board.company_name,
         )
         for board in GREENHOUSE_BOARDS
+    ]
+
+def build_lever_sources() -> list[LeverSource]:
+    return [
+        LeverSource(
+            company_slug=company.identifier,
+            company_name=company.display_name,
+        )
+        for company in LEVER_COMPANIES
+    ]
+
+def build_sources() -> list [GreenhouseSource | LeverSource]:
+    return [
+        *build_greenhouse_sources(),
+        *build_lever_sources(),
     ]

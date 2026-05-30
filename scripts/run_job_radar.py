@@ -5,7 +5,7 @@ from app.db.session import AsyncSessionLocal
 from app.notifications.discord import DiscordNotifier
 from app.profiles import mack_profile
 from app.services.job_radar_service import JobRadarService
-from app.sources.config import build_greenhouse_sources
+from app.sources.config import build_sources
 
 
 async def main() -> None:
@@ -30,7 +30,7 @@ async def main() -> None:
             notifier=notifier,
         )
 
-        for source in build_greenhouse_sources():
+        for source in build_sources():
             try:
                 result = await service.run_once(
                     source=source,
