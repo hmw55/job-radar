@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     database_url: str = "sqlite+aiosqlite:///./job_radar.db"
     discord_webhook_url: str | None = None
     poll_interval_minutes: int = 15
+    notification_limit: int = 5
 
     model_config = SettingsConfigDict(
         env_file=".env",

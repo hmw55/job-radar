@@ -28,7 +28,7 @@ async def main() -> None:
         result = await service.run_once(
             source=source, 
             profile=mack_profile,
-            notification_limit=5,
+            notification_limit=settings.notification_limit,
         )
 
     print(f"Fetched: {result.fetched_count}")
