@@ -25,7 +25,7 @@ async def main() -> None:
                 if result.discovered:
                     discovered_count += 1
                     print (
-                        f"Disovered {result.display_name}: "
+                        f"Discovered {result.display_name}: "
                         f"{result.provider}:{result.identifier}"
                     )
                 else:
