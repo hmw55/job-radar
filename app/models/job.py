@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import DateTime, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -31,3 +31,7 @@ class Job(Base):
         default=datetime.utcnow,
         nullable=False,
     )
+
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    removed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+

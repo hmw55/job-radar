@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from datetime import datetime
 
 from app.models.job import Job
 from app.sources.base import NormalizedJob
@@ -41,3 +42,20 @@ class JobRepository:
 
         result = await self.session.execute(statement)
         return list(result.scalars().all())
+    
+    async def list_active_jobs_by_source(self, source: str) -> list[Job]:
+        statement = select(Job).where(
+            Job.source == source,
+            Job.is_active.is_(True),
+        )
+
+        result = await self.session.execute(statement)
+        return list(result.scalars().all())
+
+    async def mark_removed(self, job: Job) -> Job:
+        job.is_active = False
+        job.removed_at = datetime.utcnow()
+
+        await self.session.flush()
+
+        return job

@@ -18,6 +18,7 @@ async def main() -> None:
     print(f"Fetched: {result.fetched_count}")
     print(f"New: {result.new_count}")
     print(f"Existing: {result.existing_count}")
+    print(f"Removed: {result.removed_count}")
 
 
 if __name__ == "__main__":

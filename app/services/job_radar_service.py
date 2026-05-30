@@ -16,6 +16,7 @@ class JobRadarRunResult:
     fetched_count: int
     new_count: int
     existing_count: int
+    removed_count: int
     matched_count: int
     sent_count: int
     skipped_count: int
@@ -80,6 +81,7 @@ class JobRadarService:
             fetched_count=ingestion_result.fetched_count,
             new_count=ingestion_result.new_count,
             existing_count=ingestion_result.existing_count,
+            removed_count=ingestion_result.removed_count,
             matched_count=len(matches),
             sent_count=sent_count,
             skipped_count=skipped_count,
