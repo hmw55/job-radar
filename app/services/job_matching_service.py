@@ -14,6 +14,8 @@ KEYWORD_MATCH_SCORE = 10
 LOCATION_MATCH_SCORE = 10
 EXPERIENCE_MATCH_SCORE = 10
 MAX_KEYWORD_SCORE = 40
+REMOTE_MATCH_SCORE = 20
+LOCATION_MATCH_SCORE = 10
 
 
 @dataclass(frozen=True)
@@ -82,6 +84,10 @@ class JobMatchingService:
                 MAX_KEYWORD_SCORE,
             )
             reasons.append(f"Matched keywords: {', '.join(matched_keywords)}")
+
+        if job.location and self._is_remote_location(job.location.lower()):
+            score += REMOTE_MATCH_SCORE
+            reasons.append("Remote position")
 
         matched_locations = self._match_location(job, profile)
         if matched_locations:
