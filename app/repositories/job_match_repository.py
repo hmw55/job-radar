@@ -8,7 +8,7 @@ from app.models.job_match import JobMatch
 from app.services.job_matching_service import JobMatchResult
 
 
-class JobMatchRepsoity: 
+class JobMatchRepository: 
     def __init__(self, session: AsyncSession) -> None: 
         self.session = session
 

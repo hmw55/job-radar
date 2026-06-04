@@ -4,12 +4,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.notifications.discord import DiscordNotifier
 from app.profiles.search_profile import SearchProfile
+from app.repositories.job_match_repository import JobMatchRepository
 from app.repositories.job_notification_repository import JobNotificationRepository
 from app.repositories.job_repository import JobRepository
-from app.repositories.job_match_repository import JobMatchRepsoity
 from app.services.job_ingestion_service import JobIngestionService
 from app.services.job_matching_service import JobMatchingService
-from app.services.job_matching_service import JobMatchResult
 from app.sources.base import JobSource
 
 
@@ -26,11 +25,11 @@ class JobRadarRunResult:
     failure_reasons: list[str]
 
 
-class JobRadarService: 
+class JobRadarService:
     def __init__(
-            self, 
-            session: AsyncSession,
-            notifier: DiscordNotifier,
+        self,
+        session: AsyncSession,
+        notifier: DiscordNotifier,
     ) -> None:
         self.session = session
         self.notifier = notifier
@@ -38,10 +37,10 @@ class JobRadarService:
         self.job_repository = JobRepository(session)
         self.notification_repository = JobNotificationRepository(session)
         self.matching_service = JobMatchingService()
-        self.match_repository = JobMatchRepsoity(session)
+        self.match_repository = JobMatchRepository(session)
 
     async def run_once(
-        self, 
+        self,
         source: JobSource,
         profile: SearchProfile,
         notification_limit: int = 5,
@@ -63,12 +62,13 @@ class JobRadarService:
         sent_count = 0
         skipped_count = 0
 
-        matches_to_send = self._get_matches_to_notify(
-            matches,
-            notification_limit,
-        )
+        for result in matches:
+            if notification_limit == 0:
+                break
 
-        for result in matches_to_send:
+            if notification_limit > 0 and sent_count >= notification_limit:
+                break
+
             job = result.job
 
             already_sent = await self.notification_repository.was_sent(
@@ -105,16 +105,3 @@ class JobRadarService:
             failure_reasons=[],
         )
     
-    def _get_matches_to_notify(
-            self, 
-            matches: list[JobMatchResult],
-            notification_limit: int,
-    ) -> list[JobMatchResult]:
-        if notification_limit == 0:
-            return []
-        
-        if notification_limit < 0:
-            return matches
-        
-        return matches[:notification_limit]
-        
