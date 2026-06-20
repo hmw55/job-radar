@@ -186,6 +186,56 @@ Database: PostrgeSQL
     - Multi-user support
     - Analytics and reporting
 
+--
+
+## v1.0 Checklist
+
+Job Radar v1.0 will be considered complete when a user can form the repository, configure their job search, and recieve useful Discord alerts with minimal set up.
+
+### Core Platform
+
+- [x] Greenhouse support
+- [x] Ashby support
+- [x] Lever support
+- [x] PostgreSQL persistence
+- [x] Discord notifications
+- [x] Duplicate notification prevention
+- [x] GitHub Actions scheduling
+- [x] Automated source discovery
+
+### Source Coverage
+
+- [ ] 50+ active monitored company sources
+- [ ] Expanded default source candidate
+- [ ] Source packs by job category
+- [ ] Multiple source packs selectable during setup
+- [ ] Source health/status reporting
+
+### Matching
+
+- [x] Profile-based matching 
+- [x] Match explanations 
+- [x] Improve false-positive filtering 
+- [x] Better remote/location filtering 
+- [x] Role-specific default profiles 
+
+### Fork-Friendly Setup
+
+- [ ] Interactive setup script
+- [ ] Example profiles
+- [ ] Example source packs
+- [ ] GitHub Actions setup guidance
+- [ ] Non-technical setup guidance
+- [ ] Docker setup option
+
+### Documentation
+
+- [x] README overview
+- [ ] Wiki setup documentation
+- [ ] Quickstart guide
+- [ ] Profile customization guide
+- [ ] Source discovery guide
+- [ ] Troubleshooting guide
 
 ---
 
