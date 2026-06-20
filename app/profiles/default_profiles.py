@@ -72,7 +72,7 @@ mack_profile = SearchProfile(
         "united states",
         "usa",
         "us",
-        "u.s."
+        "u.s.",
         "u.s.a",
         "americas",
         "north america",

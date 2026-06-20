@@ -28,7 +28,7 @@ class SourceRegistryService:
         company_name: str,
     ) -> None:
         await self.register_source(
-            provider="lever",
+            provider="greenhouse",
             identifier=board_token,
             display_name=company_name,
         )
