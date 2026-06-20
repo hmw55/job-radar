@@ -2,7 +2,7 @@ from app.profiles.search_profile import SearchProfile
 
 
 mack_profile = SearchProfile(
-    name="Mack - Early Career Tech Roles",
+    name="Default Tech Profile",
     job_titles=[
         "software engineer",
         "software developer",
@@ -23,6 +23,12 @@ mack_profile = SearchProfile(
         "technical consultant",
         "customer engineer",
         "platform support engineer",
+        "site reliability engineer",
+        "sre",
+        "patform engineer",
+        "devops engineer",
+        "forward deployed engineer",
+        "solutions engineer",
     ],
     keywords=[
         "react",
@@ -63,6 +69,19 @@ mack_profile = SearchProfile(
         "manager",
         "director",
         "lead",
+        "vp",
+        "vice president",
+        "head of",
+        "recruiter",
+        "recruiting",
+        "talent",
+        "account executive",
+        "sales",
+        "marketing",
+        "counsel",
+        "attorney",
+        "hr",
+        "people",
     ],
     excluded_companies=[],
     remote_only=False,

@@ -99,8 +99,10 @@ class JobMatchingService:
             score += EXPERIENCE_MATCH_SCORE
             reasons.append(f"Matched experience: {', '.join(matched_experience)}")
 
-        matched = score >= MINIMUM_MATCH_SCORE
-        match_level = self.get_match_level(score)
+        has_role_alignment = bool(matched_titles)
+
+        matched = score >= MINIMUM_MATCH_SCORE and has_role_alignment
+        match_level = self.get_match_level(score if matched else 0)
 
         return JobMatchResult(
             job=job,
