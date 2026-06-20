@@ -1,7 +1,7 @@
 import asyncio
 
 from app.db.session import AsyncSessionLocal
-from app.profiles import mack_profile
+from app.profiles import default_profile
 from app.repositories.job_repository import JobRepository
 from app.services.job_matching_service import JobMatchingService
 
@@ -12,7 +12,7 @@ async def main() -> None:
         jobs = await repository.list_jobs(limit=250)
 
     matcher = JobMatchingService()
-    results = [matcher.match_job(job, mack_profile) for job in jobs]
+    results = [matcher.match_job(job, default_profile) for job in jobs]
 
     matches = [result for result in results if result.matched]
     matches.sort(key=lambda result: result.score, reverse=True)

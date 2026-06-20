@@ -2,7 +2,7 @@ import asyncio
 
 from app.core.config import settings
 from app.db.session import AsyncSessionLocal
-from app.profiles import mack_profile
+from app.profiles import default_profile
 from app.repositories.job_repository import JobRepository
 from app.services.job_matching_service import JobMatchingService
 from app.notifications.discord import DiscordNotifier
@@ -20,7 +20,7 @@ async def main() -> None:
         jobs = await repository.list_jobs(limit=250)
 
         matcher = JobMatchingService()
-        results =  [matcher.match_job(job, mack_profile) for job in jobs]
+        results =  [matcher.match_job(job, default_profile) for job in jobs]
 
         matches = [result for result in results if result.matched]
         matches.sort(key=lambda result: result.score, reverse=True)
@@ -35,7 +35,7 @@ async def main() -> None:
 
             already_sent = await notification_repository.was_sent(
                 job_id=job.id,
-                profile_name=mack_profile.name,
+                profile_name=default_profile.name,
                 channel="discord",
             )
 
@@ -47,7 +47,7 @@ async def main() -> None:
 
             await notification_repository.mark_sent(
                 job_id=job.id,
-                profile_name=mack_profile.name,
+                profile_name=default_profile.name,
                 channel="discord",
             )
 

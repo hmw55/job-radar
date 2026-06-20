@@ -1,16 +1,16 @@
-from app.profiles import mack_profile
+from app.profiles import default_profile
 
 
 def main() -> None: 
-    print(f"Profile: {mack_profile.name}")
+    print(f"Profile: {default_profile.name}")
     print()
     print("Job titles:")
-    for title in mack_profile.job_titles:
+    for title in default_profile.job_titles:
         print(f"- {title}")
 
     print()
     print("Keywords:")
-    for keyword in mack_profile.keywords:
+    for keyword in default_profile.keywords:
         print(f"- {keyword}")
 
 

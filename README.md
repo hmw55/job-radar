@@ -18,7 +18,7 @@ and includes automated source discovery, PostgreSQL persistence, match scoring, 
 
 ## Why I Built It
 
-Finding software engineering jobs oftem means checking dozens of company career pages every day. 
+Finding software engineering jobs often means checking dozens of company career pages every day. 
 
 Most job boards:
 - Lag behind company ATS systems
@@ -81,12 +81,12 @@ Level: Excellent Match
 
 ### Discord Notifications
 
-High-scoring opportunities are delivered directly to Discord using webjooks. 
+High-scoring opportunities are delivered directly to Discord using webhooks. 
 
 Features include:
 - Duplicate prevention
 - Notification history tracking
-- Configurable rate limites
+- Configurable rate limits
 - Match reasoning summaries
 
 ### Source Registry

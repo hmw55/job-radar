@@ -1,3 +1,25 @@
+# ============================================================
+# Job Radar Service
+# ============================================================
+#
+# This service coordinates the entire Job Radar workflow.
+#
+# A typical run performs the following steps:
+#
+# 1. Fetch jobs from an ATS source
+# 2. Store new jobs in the database
+# 3. Load jobs for evaluation
+# 4. Score jobs against a search profile
+# 5. Persist match results
+# 6. Send Discord notifications
+# 7. Record notification history
+#
+# This is effectively the main orchestration layer of the
+# application.
+#
+# Most high-level Job Radar behavior eventually flows through
+# this service.
+# ============================================================
 from dataclasses import dataclass
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,6 +36,17 @@ from app.sources.base import JobSource
 
 @dataclass(frozen=True)
 class JobRadarRunResult:
+    # Summary of a single Job Radar execution.
+    # 
+    # These values are used for logging, debugging, monitoring, 
+    # and future analytics.
+    # 
+    # Example: 
+    #   Source: Airbnb
+    #   Fetched: 150
+    #   New: 12
+    #   Matches: 4
+    #   Sent: 4 
     fetched_count: int
     new_count: int
     existing_count: int
@@ -39,6 +72,19 @@ class JobRadarService:
         self.matching_service = JobMatchingService()
         self.match_repository = JobMatchRepository(session)
 
+    # Execute a complete Job Radar run against a single ATS source.
+    # 
+    # Workflow: 
+    # 1. Ingest jobs from the source
+    # 2. Load stored jobs
+    # 3. Evaluate jobs against the search profile
+    # 4. Save match results
+    # 5. Send Discord notifications
+    # 6. Record notification history
+    # 7. Commit database changes
+    # 
+    # Returns: 
+    #   JobRadarRunResult 
     async def run_once(
         self,
         source: JobSource,
@@ -47,10 +93,21 @@ class JobRadarService:
     ) -> JobRadarRunResult:
         ingestion_result = await self.ingestion_service.ingest_from_source(source)
 
+        # Evaluate a subset of the most recently stored jobs. 
+        # 
+        # This limit prevents large registries from causing 
+        # excessively long matching runs. 
+        # 
+        # Future version may make this configurable. 
         jobs = await self.job_repository.list_jobs(limit=250)
         results = [self.matching_service.match_job(job, profile) for job in jobs]
 
         matches = [result for result in results if result.matched]
+
+        # Highest-scoring opportunities are prioritized first. 
+        # 
+        # This ensures notification limits favor the strongest 
+        # opportunities available. 
         matches.sort(key=lambda result: result.score, reverse=True)
 
         for result in matches:
@@ -66,11 +123,22 @@ class JobRadarService:
             if notification_limit == 0:
                 break
 
+            # Notification Throttling. 
+            # 
+            # Limits the number of notifications sent during 
+            # a single run to avoid overwhelming users and 
+            # Discord channels. 
             if notification_limit > 0 and sent_count >= notification_limit:
                 break
 
             job = result.job
 
+
+            # Prevent duplicate Discord notification. 
+            # 
+            # A job may remain in the database for multiple runs. 
+            # This check ensures users receive each matching job 
+            # only once per profile/channel combination. 
             already_sent = await self.notification_repository.was_sent(
                 job_id=job.id,
                 profile_name=profile.name,
@@ -91,6 +159,13 @@ class JobRadarService:
 
             sent_count += 1
 
+        # Persis: 
+        # - Job changes
+        # - Match records
+        # - Norification history
+        # 
+        # Everything is committed at the end of the run 
+        # to keep execution atomic. 
         await self.session.commit()
 
         return JobRadarRunResult(

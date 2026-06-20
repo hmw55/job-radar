@@ -4,6 +4,186 @@ Render,render
 Railway,railway
 Supabase,supabase
 Neon,neon
-Cursor,cursor
-Linear,linear
 PostHog,posthog
+Linear,linear
+Cursor,cursor
+Retool,retool
+Docker,docker
+GitLab,gitlab
+HashiCorp,hashicorp
+Cloudflare,cloudflare
+DigitalOcean,digitalocean
+Elastic,elastic
+Grafana Labs,grafana
+Datadog,datadog
+Sentry,sentry
+Fly.io,flyio
+Confluent,confluent
+MongoDB,mongodb
+Redis,redis
+Cockroach Labs,cockroachlabs
+PlanetScale,planetscale
+
+OpenAI,openai
+Anthropic,anthropic
+Perplexity,perplexity
+Cohere,cohere
+Scale AI,scaleai
+Runway,runway
+ElevenLabs,elevenlabs
+Weights & Biases,wandb
+Hugging Face,huggingface
+
+Notion,notion
+Zapier,zapier
+Airtable,airtable
+Webflow,webflow
+Canva,canva
+Miro,miro
+Figma,figma
+Monday,monday
+ClickUp,clickup
+HubSpot,hubspot
+Zendesk,zendesk
+Intercom,intercom
+
+Stripe,stripe
+Plaid,plaid
+Mercury,mercury
+Ramp,ramp
+Brex,brex
+Robinhood,robinhood
+Wise,wise
+Coinbase,coinbase
+
+Atlassian,atlassian
+Twilio,twilio
+Snowflake,snowflake
+Salesforce,salesforce
+Adobe,adobe
+ServiceNow,servicenow
+
+Automattic,automattic
+Shopify,shopify
+Buffer,buffer
+Doist,doist
+Toggl,toggl
+Hotjar,hotjar
+
+H&R Block,hrblock
+Intuit,intuit
+TurboTax,turbotax
+Block,block
+Square,square
+
+Target,target
+Walmart,walmart
+Costco,costco
+Best Buy,bestbuy
+Home Depot,homedepot
+Lowe's,lowes
+Chewy,chewy
+Petco,petco
+PetSmart,petsmart
+
+Southwest Airlines,southwest
+Delta Air Lines,delta
+United Airlines,united
+American Airlines,aa
+Alaska Airlines,alaskaair
+JetBlue,jetblue
+
+Marriott,marriott
+Hilton,hilton
+Hyatt,hyatt
+MGM Resorts,mgm
+Caesars Entertainment,caesars
+Live Nation,livenation
+Topgolf,topgolf
+Dave & Buster's,daveandbusters
+Airbnb,airbnb
+Expedia,expedia
+Booking.com,booking
+
+Kaiser Permanente,kaiser
+UnitedHealth Group,unitedhealth
+CVS Health,cvshealth
+Walgreens,walgreens
+Cigna,cigna
+Elevance Health,elevance
+Humana,humana
+Mayo Clinic,mayoclinic
+Cleveland Clinic,clevelandclinic
+CommonSpirit Health,commonspirit
+HCA Healthcare,hca
+Labcorp,labcorp
+Quest Diagnostics,questdiagnostics
+
+State Farm,statefarm
+Progressive,progressive
+GEICO,geico
+Allstate,allstate
+Liberty Mutual,libertymutual
+USAA,usaa
+
+JPMorgan Chase,jpmorganchase
+Bank of America,bankofamerica
+Wells Fargo,wellsfargo
+Capital One,capitalone
+American Express,americanexpress
+Discover,discover
+Fidelity,fidelity
+Charles Schwab,charlesschwab
+
+Kroger,kroger
+Albertsons,albertsons
+Whole Foods,wholefoods
+Trader Joe's,traderjoes
+IKEA,ikea
+Nordstrom,nordstrom
+Macy's,macys
+
+UPS,ups
+FedEx,fedex
+DHL,dhl
+XPO,xpo
+Hertz,hertz
+Enterprise,enterprise
+
+Disney,disney
+Warner Bros Discovery,warnerbrosdiscovery
+Netflix,netflix
+Spotify,spotify
+Ticketmaster,ticketmaster
+
+Starbucks,starbucks
+Chipotle,chipotle
+Panera,panera
+Texas Roadhouse,texasroadhouse
+Darden Restaurants,darden
+
+Coursera,coursera
+Udemy,udemy
+Duolingo,duolingo
+Instructure,instructure
+
+Caterpillar,caterpillar
+John Deere,johndeere
+3M,3m
+Honeywell,honeywell
+GE Aerospace,geaerospace
+
+Lockheed Martin,lockheedmartin
+Northrop Grumman,northropgrumman
+Boeing,boeing
+RTX,rtx
+General Dynamics,generaldynamics
+
+Microsoft,microsoft
+Google,google
+Meta,meta
+Apple,apple
+Amazon,amazon
+Oracle,oracle
+Cisco,cisco
+VMware,vmware

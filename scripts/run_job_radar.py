@@ -3,7 +3,7 @@ import asyncio
 from app.core.config import settings
 from app.db.session import AsyncSessionLocal
 from app.notifications.discord import DiscordNotifier
-from app.profiles import mack_profile
+from app.profiles import default_profile
 from app.services.job_radar_service import JobRadarService
 from app.repositories.company_source_repository import companySourceRepository
 from app.sources.factory import build_source_from_company_source
@@ -39,7 +39,7 @@ async def main() -> None:
             try:
                 result = await service.run_once(
                     source=source,
-                    profile=mack_profile,
+                    profile=default_profile,
                     notification_limit=settings.notification_limit,
                 )
             except Exception as error:

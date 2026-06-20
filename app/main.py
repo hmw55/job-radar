@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 app = FastAPI(
     title="Job Radar",
-    version="0.1.0",
+    version="0.5.0",
     description="A respectful job aggregation and alerting engine.",
 )
 

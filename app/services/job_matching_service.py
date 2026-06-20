@@ -1,25 +1,91 @@
+# ============================================================
+# Job Matching Engine
+# ============================================================
+#
+# This file contains the core matching logic used by Job Radar.
+#
+# Every discovered job passes through this service.
+#
+# The matching engine evaluates:
+#
+# - Job titles
+# - Keywords
+# - Locations
+# - Experience levels
+# - Excluded titles
+# - Excluded companies
+#
+# and produces:
+#
+# - Match score
+# - Match level
+# - Match reasoning
+#
+# The resulting score determines whether a job should be
+# considered a match and whether it should be sent to the
+# notification pipeline.
+#
+# If you are modifying how Job Radar ranks opportunities,
+# this is usually the first file to inspect.
+# ============================================================
 from dataclasses import dataclass, field
 
 from app.models.job import Job
 from app.profiles.search_profile import SearchProfile
 
-# Match thresholds
+# ============================================================
+# Match Thresholds
+# ============================================================
+#
+# These values determine how scores are translated into
+# human-readable match levels.
+#
+# Example:
+#
+# 95 -> EXCELLENT MATCH
+# 75 -> STRONG MATCH
+# 55 -> MATCH
+# 20 -> NO MATCH
 MINIMUM_MATCH_SCORE = 50
 STRONG_MATCH_SCORE = 70
 EXCELLENT_MATCH_SCORE = 90
 
-# Score contributions
+# ============================================================
+# Score Contributions
+# ============================================================
+#
+# These values control how much each signal contributes
+# to the overall match score.
+#
+# Increasing TITLE_MATCH_SCORE makes role titles more
+# important.
+#
+# Increasing KEYWORD_MATCH_SCORE makes skills and
+# technologies more important.
+#
+# Adjust these values carefully, as they directly impact
+# notification quality.
 TITLE_MATCH_SCORE = 50
 KEYWORD_MATCH_SCORE = 10
 LOCATION_MATCH_SCORE = 10
 EXPERIENCE_MATCH_SCORE = 10
 MAX_KEYWORD_SCORE = 40
 REMOTE_MATCH_SCORE = 20
-LOCATION_MATCH_SCORE = 10
 
 
 @dataclass(frozen=True)
 class JobMatchResult:
+    # Result returned by the matching engine.
+    # 
+    # Contains:
+    # - Original job
+    # - Match status
+    # - Numerical score
+    # - Human-readable score
+    # - Reasons explaining why the score was assigned
+    # 
+    # These reasons are later surfaced in logs and notifications 
+    # to help users understand why a job matched their profile. 
     job: Job
     matched: bool
     score: int
@@ -29,6 +95,22 @@ class JobMatchResult:
 
 class JobMatchingService:
     def match_job(self, job: Job, profile: SearchProfile) -> JobMatchResult:
+        # Evaluate a job against a search profile.
+        # 
+        # Matching occurs in several stages: 
+        # 1. Locating filtering 
+        # 2. Exclusing checks
+        # 3. Title matching
+        # 4. Keyword matching
+        # 5. Remote detection
+        # 6. Experience matching
+        # 7. Score calculation
+        # 
+        # A valid title match is currently required before a 
+        # job can be considered a match. 
+        # 
+        # Returns: 
+        #   JobMatchResult  
         searchable_text = self._build_searchable_text(job)
         title = job.title.lower()
         company = job.company.lower()
@@ -99,6 +181,15 @@ class JobMatchingService:
             score += EXPERIENCE_MATCH_SCORE
             reasons.append(f"Matched experience: {', '.join(matched_experience)}")
 
+        # Require at least one matching target role. 
+        # 
+        # This prevents jobs from matching solely because they 
+        # contain overlapping keywords. 
+        # 
+        # Example: 
+        # 
+        # A recruiter role mentioning "Python" should not match 
+        # a software engineering profile. 
         has_role_alignment = bool(matched_titles)
 
         matched = score >= MINIMUM_MATCH_SCORE and has_role_alignment
