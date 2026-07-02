@@ -283,7 +283,7 @@ default_profile = SearchProfile(
     # ATS providers format remote jobs differently, so remote
     # detection depends on the location metadata provided by
     # each ATS.
-    remote_only=False,
+    remote_only=True,
 
     # ========================================================
     # Allowed Locations

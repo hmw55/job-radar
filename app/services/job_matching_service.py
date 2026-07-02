@@ -28,6 +28,8 @@
 # If you are modifying how Job Radar ranks opportunities,
 # this is usually the first file to inspect.
 # ============================================================
+import re 
+
 from dataclasses import dataclass, field
 
 from app.models.job import Job
@@ -136,24 +138,27 @@ class JobMatchingService:
         reasons: list[str] = []
         score = 0
 
-        if self._contains_any(title, profile.excluded_titles):
-            return JobMatchResult(
-                job=job,
-                matched=False,
-                score=0,
-                match_level="NO MATCH",
-                reasons=["Excluded title"],
-            )
+        # Exact Word-Boundary Exlcusion for Titles
+        if self._contains_any_word(title, profile.excluded_titles):
+                    return JobMatchResult(
+                        job=job, 
+                        matched=False, 
+                        score=0, 
+                        match_level="NO MATCH", 
+                        reasons=["Excluded title"]
+                    )
 
         if self._contains_any(company, profile.excluded_companies):
             return JobMatchResult(
-                job=job,
-                matched=False,
-                score=0,
-                match_level="NO MATCH",
-                reasons=["Excluded company"],
+                job=job, 
+                matched=False, 
+                score=0, 
+                match_level="NO MATCH", 
+                reasons=["Excluded company"]
             )
+        
 
+        # Title Matching via flexible phrase matches or word boundaries
         matched_titles = self._matched_terms(title, profile.job_titles)
         if matched_titles:
             score += TITLE_MATCH_SCORE
@@ -287,6 +292,22 @@ class JobMatchingService:
 
     def _contains_any(self, text: str, terms: list[str]) -> bool:
         return any(term.lower() in text for term in terms)
-
+    
+    def _contains_any_word(self, text: str, terms: list[str]) -> bool:
+        for term in terms: 
+            # Ensure words like "hr", "vp", or "lead" match exactly, not inside "threads" or "developer"
+            pattern = rf"\b{re.esxape(term.lower())}\b"
+            if re.search(pattern, text):
+                return True
+            return False
+        
+    def _matched_terms_word(self, text: str, terms: list[str]) -> list[str]:
+            matched = []
+            for term in terms:
+                pattern = rf"\b{re.escape(term.lower())}\b"
+                if re.search(pattern, text):
+                    matched.append(term)
+            return matched
+    
     def _matched_terms(self, text: str, terms: list[str]) -> list[str]:
         return [term for term in terms if term.lower() in text]
