@@ -4,12 +4,19 @@ greenhouse,stripe,Stripe
 greenhouse,vercel,Vercel
 greenhouse,datadog,Datadog
 greenhouse,elastic,Elastic
+greenhouse,gitlab,GitLab
+greenhouse,hashicorp,HashiCorp
+greenhouse,cloudflare,Cloudflare
+greenhouse,sentry,Sentry
+greenhouse,mongodb,MongoDB
+greenhouse,notion,Notion
 
 ashby,ashby,Ashby
 ashby,supabase,Supabase
 ashby,render,Render
 ashby,posthog,PostHog
 ashby,cursor,Cursor
+ashby,flyio,Fly.io
 ashby,linear,Linear
 ashby,railway,Railway
 ashby,retool,Retool
@@ -17,4 +24,5 @@ ashby,neon,Neon
 
 lever,swissborg,SwissBorg
 lever,docker,Docker
+lver,scaleai,Scale AI
 lever,sourcegraph,Sourcegraph
